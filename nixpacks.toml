@@ -1,0 +1,4 @@
+[phases.install]
+  cmds = ['npm i --omit=dev --legacy-peer-deps']
+[phases.build]
+  cmds = ['CI=false npm run build']
