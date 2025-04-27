@@ -8,6 +8,6 @@ if(dev) {
 }
 
 console.log(url);
-url = 'https://67d6-121-98-82-132.ngrok-free.app';
+url = 'https://geller2025-production-4bef.up.railway.app';
 
 export default url;
