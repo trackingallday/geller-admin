@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import BasePage from './BasePage';
 import styles from '../../styles';
 import { message, Form, Icon, Input, Button, Row, Col, Card } from 'antd';
-import { postLogin } from '../../util/DjangoApi';
+import { postLogin, getUserDetails } from '../../util/DjangoApi';
 import { formItemLayout } from '../../constants/tableLayout';
 
 
@@ -86,12 +86,15 @@ class Login extends BasePage {
     this.stopLoading();
   }
 
-  handleSubmit = ({ username, password }) => {
+  handleSubmit = async ({ username, password }) => {
     if(this.state.submitting) {
       return;
     }
     this.startLoading();
-    postLogin(username, password, this.onSuccess, this.onFail);
+    await postLogin(username, password, this.onFail);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    const userDetails = await getUserDetails(() => {});
+    this.onSuccess(userDetails);
   }
 
   renderContent() {

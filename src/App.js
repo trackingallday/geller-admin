@@ -15,6 +15,7 @@ class App extends Component {
   }
 
   onLogin = (userDetails) => {
+    console.log('onLogin', userDetails);
     this.setState({
       user: userDetails,
       started: true,
@@ -24,7 +25,10 @@ class App extends Component {
   componentDidMount() {
     const token = localStorage.getItem('token');
     if(token && token !== "null") {
-      getUserDetails(this.onLogin);
+      getUserDetails(() => {}).then((userDetails) => {
+        console.log('userDetails', userDetails);
+        this.onLogin(userDetails);
+      });
     } else {
       this.setState({
         started: true,

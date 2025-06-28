@@ -136,7 +136,11 @@ export function postEditProduct(data, callback, onFail=null) {
 
 export function getUserDetails(onSuccess, onFail=fail) {
   console.log('getUserDetails');
-  return getData('/user_details/', (res) => onSuccess(res.data), (err) => onFail(err));
+  return getData('/user_details/', (res) => {
+    console.log(res.data);
+    onSuccess(res.data);
+    return res.data;
+  }, (err) => onFail(err));
 }
 
 export function getProductsMap(onSuccess, onFail=fail) {
@@ -163,7 +167,6 @@ export function postLogin(username, password, onSuccess, onFail=fail) {
   return axios.post(serverUrl + '/get_auth_token/', { username, password })
     .then((response) => {
       localStorage.setItem('token', `Token ${response.data.token}`);
-      return getUserDetails(onSuccess, onFail);
     }).catch((error) => {
       onFail(error);
     });

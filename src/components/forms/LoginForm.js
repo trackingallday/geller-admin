@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { message, Form, Icon, Input, Button, Row, Col, Card } from 'antd';
-import { postLogin } from '../../util/DjangoApi';
+import { postLogin, getUserDetails } from '../../util/DjangoApi';
 import { formItemLayout, tailFormItemLayout } from '../../constants/tableLayout';
 
 
@@ -9,27 +9,29 @@ const FormItem = Form.Item;
 
 class LoginForm extends Component {
 
-  onLogin = (userDetails) => {
-    this.stopLoading();
-    message.success('Great Welcome back', 3);
-    this.props.onLogin(userDetails);
-  }
-
   onFail = (message) => {
     message.success('Please check your details', 3);
     this.props.stopLoading();
   }
 
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault();
     if(this.state.submitting) {
       return;
     }
-    this.props.form.validateFields((err, values) => {
+    this.props.form.validateFields(async (err, values) => {
       if (!err) {
         this.setState({ submitting: true })
         this.props.startLoading();
-        postLogin(values.username, values.password, this.onLogin)
+        await postLogin(values.username, values.password);
+        await new Promise(resolve => setTimeout(resolve(), 1000));
+        const userDetails = await getUserDetails((b) => {console.log(b)}, this.onFail);
+        console.log('userDetails', userDetails);
+        this.stopLoading();
+        console.log('onLogin', userDetails);
+        message.success('Great Welcome back', 3);
+        console.log('onLogin', this.props.onLogin);
+        await this.props.onLogin(userDetails);
       } else {
         this.stopLoading();
       }
