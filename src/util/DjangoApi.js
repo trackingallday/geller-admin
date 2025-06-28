@@ -6,6 +6,7 @@ const fail = (err) => console.warn(err);
 
 function getData(path, onSuccess, onFail=fail) {
   const token = localStorage.getItem('token');
+  console.log('getData', serverUrl + path, token);
   axios.defaults.headers.common['Authorization'] = token;
   return axios.get(serverUrl + path)
     .then((response) => {
@@ -21,6 +22,8 @@ function postData(path, data, onSuccess, onFail=null) {
     onFail = fail
   }
   const token = localStorage.getItem('token');
+  console.log('post', serverUrl + path, token);
+
   axios.defaults.headers.common['Authorization'] = token;
   return axios.post(serverUrl + path, { data })
     .then((response) => {
@@ -132,6 +135,7 @@ export function postEditProduct(data, callback, onFail=null) {
 }
 
 export function getUserDetails(onSuccess, onFail=fail) {
+  console.log('getUserDetails');
   return getData('/user_details/', (res) => onSuccess(res.data), (err) => onFail(err));
 }
 
