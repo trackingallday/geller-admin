@@ -91,6 +91,8 @@ class Login extends BasePage {
       return;
     }
     this.startLoading();
+    localStorage.setItem('token', null);
+    console.log('delete token');
     await postLogin(username, password, this.onFail);
     await new Promise(resolve => setTimeout(resolve, 1000));
     const userDetails = await getUserDetails(() => {});
