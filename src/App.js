@@ -47,6 +47,10 @@ class App extends Component {
       return (<LoginPage onLogin={this.onLogin} />)
     }
 
+    if(user && !user.profile) {
+      return (<AdminPage user={user} />);
+    }
+
     switch(user.profile.profileType) {
       case 'admin':
         return (
